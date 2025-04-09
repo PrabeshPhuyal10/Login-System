@@ -1,0 +1,2 @@
+student1,Football,Debate Club
+sam0,Football,Debate Club,Basketball
