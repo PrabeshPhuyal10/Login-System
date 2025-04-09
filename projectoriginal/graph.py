@@ -8,7 +8,7 @@ def plot_student_trend(student_name):
 
     try:
         # Read txt file without headers
-        df = pd.read_csv('data/grades.txt', header=None)
+        df = pd.read_csv('projectoriginal/data/grades.txt', header=None)
         
         # Assign column names (Student + Subject1, Subject2, etc.)
         columns = ['Student'] + subjects
