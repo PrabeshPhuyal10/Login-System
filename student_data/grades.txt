@@ -1,5 +1,0 @@
-Grades
-
-Computer System = 100
-Software Engineering = 100
-Problem solving  = 100
