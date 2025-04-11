@@ -5,3 +5,6 @@ sam0,Samrat,student
 samrat,Samrat Tamrakar,student
 ssss,ssss,student
 sa,sa,student
+Prabesh,Prabesh Phuyal,admin
+Supritam,Supritam,student
+Prabesh Phuyal,Prabesh,student
