@@ -1,5 +1,5 @@
 import os
-
+import pandas as pd
 
 class User:
     def __init__(self, username, full_name, role):
@@ -114,7 +114,7 @@ def add_user(username, full_name, password, role):
         # Check if the username already exists
         with open("projectoriginal/data/users.txt", "r") as file:
             for line in file:
-                stored_username, _, _ = line.strip().split(",")
+                stored_username = line.strip().split(",")
                 if username == stored_username:
                     return False  # Username already exists
 
@@ -167,17 +167,54 @@ def get_student_eca(username):
     Returns a list of activities if found, otherwise None.
     """
     try:
-        with open("data/eca.txt", "r") as file:
+        with open("projectoriginal/data/eca.txt", "r") as file:  # Adjust path as needed
             for line in file:
-                stored_username, *activities = line.strip().split(",")
-                if username == stored_username:
-                    return activities  # Return the activities as a list
+                parts = line.strip().split(",")  # Split the line by commas
+                stored_username = parts[0]       # First part is the username
+                ecas = parts[1:]                 # Everything after is activities
+                if stored_username == username:  # Match the username
+                    return ecas                  # Return the list of activities
+            print(f"No match found for username: {username}")  # Debug
     except FileNotFoundError:
         print("Error: eca.txt file not found.")
     except Exception as e:
         print(f"Error: {e}")
     return None
 
+def get_student_grades(username):
+    """
+    Fetch grades for a student from grades.txt using pandas.
+    Returns a list of grades if found, otherwise None.
+    """
+    subjects = ['Math', 'Science', 'English']  # Define subjects
+
+    try:
+        # Read txt file without headers
+        df = pd.read_csv("projectoriginal/data/grades.txt", header=None)
+        
+        # Assign column names: 'Student' for username, then subjects
+        columns = ['Student'] + subjects
+        df.columns = columns
+        
+        # Check if student exists
+        if username not in df['Student'].values:
+            print(f"No match found for username: {username}")
+            return None
+
+        # Get row of that student
+        student_data = df[df['Student'] == username]
+
+        # Extract grades (skip 'Student' column)
+        grades = student_data.iloc[0, 1:].tolist()  # Gets grades as a list
+        
+        return grades
+
+    except FileNotFoundError:
+        print("Error: grades.txt file not found.")
+        return None
+    except Exception as e:
+        print(f"Error: {e}")
+        return None
 
 def update_student_profile(username, full_name):
     """
@@ -189,7 +226,7 @@ def update_student_profile(username, full_name):
             lines = file.readlines()
         with open("data/users.txt", "w") as file:
             for line in lines:
-                stored_username, _, role = line.strip().split(",")
+                stored_username, role = line.strip().split(",")
                 if username == stored_username:
                     file.write(f"{username},{full_name},{role}\n")
                     updated = True
@@ -199,3 +236,6 @@ def update_student_profile(username, full_name):
     except Exception as e:
         print(f"Error: {e}")
         return False
+
+
+

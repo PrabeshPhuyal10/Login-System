@@ -67,5 +67,35 @@ def delete_user(username):
     except FileNotFoundError:
         return False
 
+def get_average_percentage_all_students():
+    total_percentage = 0
+    student_count = 0
 
+    try:
+        with open("projectoriginal/data/grades.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(",")
+
+                # Convert grades to integer list
+                grades = list(map(int, parts[1:]))
+
+                # Calculate percentage of current student
+                percentage = sum(grades) / 3  
+
+                total_percentage += percentage
+                student_count += 1
+
+        if student_count == 0:
+            return 0  # Avoid divide by zero error
+
+        # Final average percentage of all students
+        avg= total_percentage / student_count  
+        return avg
+
+    except FileNotFoundError:
+        print("Error: grades.txt file not found.")
+    except Exception as e:
+        print(f"Error: {e}")
+
+    return 0
 

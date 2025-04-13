@@ -4,7 +4,7 @@ from tkinter.font import Font
 import os
 
 # Ensure data folder exists
-os.makedirs("student_data", exist_ok=True)
+os.makedirs("projectoriginal/data", exist_ok=True)
 
 # Save credentials
 with open("student_data/id.txt", "w") as f:
@@ -29,10 +29,10 @@ def trigger():
     f1 = form.get()
     f2 = form_ii.get()
 
-    with open("student_data/id.txt", "r") as z1:
+    with open("projectoriginal/data/users.txt", "r") as z1:
         save_id = z1.read().strip()
 
-    with open("student_data/password.txt", "r") as z2:
+    with open("projectoriginal/data/passwords.txt", "r") as z2:
         save_pass = z2.read().strip()
 
     if f1 == save_id and f2 == save_pass:
@@ -60,7 +60,7 @@ def trigger_eca():
     eca.configure(background="#1e1e2f")
 
     try:
-        with open("student_data/eca.txt", "r") as eca_data:
+        with open("projectoriginal/data/eca.txt", "r") as eca_data:
             std_eca = eca_data.read()
     except:
         std_eca = "No ECA data available."
@@ -74,7 +74,7 @@ def trigger_grades():
     grades.configure(background="#1e1e2f")
 
     try:
-        with open("student_data/grades.txt", "r") as grades_data:
+        with open("projectoriginal/data/grades.txt", "r") as grades_data:
             grades_eca = grades_data.read()
     except:
         grades_eca = "No grades data available."
