@@ -14,9 +14,13 @@ def authenticate(username, password):
     Returns the role (admin or student) if valid, otherwise None.
     """
     try:
-        with open("projectoriginal/data/passwords.txt", "r") as file:  # Use forward slashes for compatibility
+        with open("projectoriginal/data/passwords.txt", "r") as file:
             for line in file:
-                stored_username, stored_password, role = line.strip().split(",")
+                parts = line.strip().split(",")
+                if len(parts) != 3:  # Ensure exactly 3 values
+                    print(f"Skipping malformed line in passwords.txt: {line.strip()}")
+                    continue
+                stored_username, stored_password, role = parts
                 if username == stored_username and password == stored_password:
                     return role  # Return the role (admin or student)
     except FileNotFoundError:
@@ -25,16 +29,19 @@ def authenticate(username, password):
         print(f"Error: {e}")
     return None
 
-
 def get_user_details(username):
     """
     Fetch user details from users.txt based on the username.
     Returns a User object if found, otherwise None.
     """
     try:
-        with open("projectoriginal/data/users.txt", "r") as file:  # Use forward slashes for compatibility
+        with open("projectoriginal/data/users.txt", "r") as file:
             for line in file:
-                stored_username, full_name, role = line.strip().split(",")
+                parts = line.strip().split(",")
+                if len(parts) != 3:  # Ensure exactly 3 values
+                    print(f"Skipping malformed line in users.txt: {line.strip()}")
+                    continue
+                stored_username, full_name, role = parts
                 if username == stored_username:
                     return User(username, full_name, role)
     except FileNotFoundError:

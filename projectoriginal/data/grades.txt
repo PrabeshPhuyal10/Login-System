@@ -1,4 +1,6 @@
 Samrat,85,90,88
 John,78,82,80
 sa,56,35,53
+Supritam,97,77,88
+Prabesh Phuyal,99,88,77
 samrat,66,77,54

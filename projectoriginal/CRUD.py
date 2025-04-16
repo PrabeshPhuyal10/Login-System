@@ -1,5 +1,4 @@
-import tkinter as tk
-from tkinter import messagebox, ttk
+from tkinter import messagebox
 
 
 def user_exists(username):
@@ -19,16 +18,16 @@ def add_user(username, fullname, role, password, math_mark=0, science_mark=0, en
     
     try:
         # Add to users.txt
-        with open("projectoriginal/data/users.txt", 'a') as f:
+        with open("projectoriginal/data/users.txt", 'a+') as f:
             f.write(f"{username},{fullname},{role}\n")
 
         # Add to passwords.txt
-        with open("projectoriginal/data/passwords.txt", 'a') as f:
+        with open("projectoriginal/data/passwords.txt", 'a+') as f:
             f.write(f"{username},{password},{role}\n")
 
         # Only save marks for students
         if role == "student":
-            with open("projectoriginal/data/grades.txt", 'a') as f:
+            with open("projectoriginal/data/grades.txt", 'a+') as f:
                 f.write(f"{username},{math_mark},{science_mark},{english_mark}\n")
         return True
     except Exception as e:
@@ -98,4 +97,47 @@ def get_average_percentage_all_students():
         print(f"Error: {e}")
 
     return 0
+
+def get_student_names():
+    student_names = []
+    try:
+        with open("projectoriginal/data/users.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(",")
+                if len(parts) == 3 and parts[2] == "student":
+                    student_names.append(parts[0])
+    except FileNotFoundError:
+        print("Error: users.txt file not found.")
+    except Exception as e:
+        print(f"Error: {e}")
+    return student_names
+
+def get_admin_names():
+    admin_names = []
+    try:
+        with open("projectoriginal/data/users.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(",")
+                if len(parts) == 3 and parts[2] == "admin":
+                    admin_names.append(parts[0])
+    except FileNotFoundError:
+        print("Error: users.txt file not found.")
+    except Exception as e:
+        print(f"Error: {e}")
+    return admin_names
+
+
+def get_eca_names():
+    eca_names = set()
+    try:
+        with open("projectoriginal/data/eca.txt", "r") as file:
+            for line in file:
+                parts = line.strip().split(",")
+                activities = parts[1:]  # Skip the username
+                eca_names.update(activities)
+    except FileNotFoundError:
+        print("Error: eca.txt file not found.")
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+    return list(eca_names)
 
