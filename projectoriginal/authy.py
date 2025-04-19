@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import bcrypt
 
 class User:
     def __init__(self, username, full_name, role):
@@ -8,26 +9,27 @@ class User:
         self.role = role
 
 
+import bcrypt
+
 def authenticate(username, password):
-    """
-    Authenticate the user by checking the credentials in passwords.txt.
-    Returns the role (admin or student) if valid, otherwise None.
-    """
     try:
-        with open("projectoriginal/data/passwords.txt", "r") as file:
+        with open("projectoriginal/data/passwords_hashed.txt", "r") as file:
             for line in file:
                 parts = line.strip().split(",")
-                if len(parts) != 3:  # Ensure exactly 3 values
-                    print(f"Skipping malformed line in passwords.txt: {line.strip()}")
+                if len(parts) != 3:
                     continue
-                stored_username, stored_password, role = parts
-                if username == stored_username and password == stored_password:
-                    return role  # Return the role (admin or student)
+                stored_username, stored_hashed_password, role = parts
+
+                if username == stored_username:
+                    if bcrypt.checkpw(password.encode(), stored_hashed_password.encode()):
+                        return role  # Correct login
+                    else:
+                        return None  # Wrong password
     except FileNotFoundError:
         print("Error: passwords.txt file not found.")
     except Exception as e:
         print(f"Error: {e}")
-    return None
+    return None  # Username not found
 
 def get_user_details(username):
     """

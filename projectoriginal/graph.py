@@ -27,7 +27,7 @@ def plot_student_trend(student_name):
         marks = student_data.iloc[0, 1:].tolist()  # Gets marks for all subjects
 
         # Plotting
-        plt.figure(figsize=(10, 6))
+        plt.figure(figsize=(6, 4))  # Adjusted for compactness
         
         # Bar plot for better visualization of subject-wise marks
         bars = plt.bar(subjects, marks, color='skyblue')
@@ -53,8 +53,6 @@ def plot_student_trend(student_name):
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {str(e)}")
 
-
-    
 
 def plot_grade_distribution_pie():
     # Define grade categories (simpler version)
@@ -87,20 +85,17 @@ def plot_grade_distribution_pie():
             grade_counts[grade] = count
         
         # Plot the pie chart
-        plt.figure(figsize=(8, 8))
+        plt.figure(figsize=(5, 5))  # Adjusted for compactness
         plt.pie(grade_counts.values(), labels=grade_counts.keys(), autopct='%1.1f%%')
         plt.title('Overall Grade Distribution (All Students)')
+        plt.tight_layout()
         plt.show()
         
     except FileNotFoundError:
         messagebox.showerror("Error", "Could not find grades.txt file")
     except Exception as e:
         messagebox.showerror("Error", f"An error occurred: {e}")
-  
 
-import pandas as pd
-import matplotlib.pyplot as plt
-from tkinter import messagebox
 
 def compare_two_students(student1, student2):
     """Compare two students using a horizontal bar chart."""
@@ -123,7 +118,7 @@ def compare_two_students(student1, student2):
         grades2 = student2_data[subjects].values
         
         # Create figure
-        plt.figure(figsize=(8, 5))
+        plt.figure(figsize=(6, 4))  # Adjusted for compactness
         
         # Plot horizontal bars
         plt.barh(subjects, grades1, color='lightblue', label=student1, alpha=0.8)

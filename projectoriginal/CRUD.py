@@ -1,6 +1,6 @@
 from tkinter import messagebox
-
-
+import bcrypt
+import os
 def user_exists(username):
     try:
         with open("projectoriginal/data/users.txt", 'r') as f:
@@ -12,14 +12,19 @@ def user_exists(username):
         return False
 
 
-def add_user(username, fullname, role, password, math_mark=0, science_mark=0, english_mark=0):
+def add_user(username, fullname, role,password,eca=None,math_mark=0, science_mark=0, english_mark=0):
     if user_exists(username):
         return False
     
     try:
+        hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
         # Add to users.txt
         with open("projectoriginal/data/users.txt", 'a+') as f:
             f.write(f"{username},{fullname},{role}\n")
+
+        with open("projectoriginal/data/passwords_hashed.txt", 'a+') as f:
+            f.write(f"{username},{hashed_password},{role}\n")
 
         # Add to passwords.txt
         with open("projectoriginal/data/passwords.txt", 'a+') as f:
@@ -29,6 +34,9 @@ def add_user(username, fullname, role, password, math_mark=0, science_mark=0, en
         if role == "student":
             with open("projectoriginal/data/grades.txt", 'a+') as f:
                 f.write(f"{username},{math_mark},{science_mark},{english_mark}\n")
+
+            with open("projectoriginal/data/eca.txt", 'a+') as f:
+                f.write(f"{username},{eca}\n")
         return True
     except Exception as e:
         messagebox.showerror("Error", f"Failed to save user: {str(e)}")
@@ -37,6 +45,8 @@ def add_user(username, fullname, role, password, math_mark=0, science_mark=0, en
 def delete_user(username):
     found = False
     try:
+        # hashed_password = bcrypt.hashpw(password.encode(), bcrypt.gensalt()).decode()
+
         # Remove from users.txt
         with open("projectoriginal/data/users.txt", 'r') as f:
             lines = f.readlines()
@@ -50,7 +60,15 @@ def delete_user(username):
         # Remove from passwords.txt
         with open("projectoriginal/data/passwords.txt", 'r') as f:
             lines = f.readlines()
+            
         with open("projectoriginal/data/passwords.txt", 'w') as f:
+            for line in lines:
+                if line.split(",")[0] != username:
+                    f.write(line)
+
+        with open("projectoriginal/data/passwords_hashed.txt", 'r') as f:
+            lines = f.readlines()
+        with open("projectoriginal/data/passwords_hashed.txt", 'w') as f:
             for line in lines:
                 if line.split(",")[0] != username:
                     f.write(line)
@@ -62,9 +80,29 @@ def delete_user(username):
                 if line.split(",")[0] != username:
                     f.write(line)
 
+        try:
+            eca_path = "projectoriginal/data/eca.txt"
+            if os.path.exists(eca_path):
+                with open(eca_path, 'r') as f:
+                    lines = f.readlines()
+                with open(eca_path, 'w') as f:
+                    for line in lines:
+                        if line.split(",")[0] != username:
+                            f.write(line)
+            # If file doesn't exist, just do nothing
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to delete ECA data: {str(e)}")
+
         return found
+
+        
+    except Exception as e:
+        messagebox.showerror("Error", f"Failed to save user: {str(e)}")
+        return False
     except FileNotFoundError:
         return False
+    
+    
 
 def get_average_percentage_all_students():
     total_percentage = 0

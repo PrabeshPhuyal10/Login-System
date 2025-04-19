@@ -1,9 +1,6 @@
 admin,Admin User,admin
 student1,Sudan Pudasaini,student
 sam1,Samrat,admin
-samrat,Samrat Tamrakar,student
-ssss,ssss,student
-Nigger,Nigger,student
-Subham,Subham Rai,admin
-Andi,Aadan Rai,student
-lamo,lamo,student
+Pratham,Pratham Rai,student
+Brijen,Brijen Thapa,student
+aa,aa,student
